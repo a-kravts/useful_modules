@@ -1,0 +1,12 @@
+#!/bin/sh
+#filename: rtws
+#Replace tabs with spaces
+
+if [ -z $1 ] || [ -z $2 ] ; then
+    echo Usage: rtws number_of_spaces filename
+    return 1
+fi
+
+expand -t$1 $2 > dummy
+rm $2
+mv dummy $2
