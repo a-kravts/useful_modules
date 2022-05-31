@@ -1,22 +1,16 @@
 CC = gcc
 FLAGS = -Wall
 
-SRCMODULES = memory_copy.c \
-             memory_move.c \
-             memory_set.c \
-             string_char.c \
-             string_compare.c \
-             string_copy.c \
-             string_length.c \
-             string_n_compare.c \
-             string_n_copy.c \
-             string_right_char.c \
-             string_string.c
-
-OBJMODULES=$(SRCMODULES:.c=.o)
-
-%.o: %.c %.h
-	$(CC) $(FLAGS) $< -c
+SRCMODULES := $(wildcard *.c)
+OBJMODULES = $(SRCMODULES:.c=.o)
+OBJMODULES32 = $(SRCMODULES:.c=32.o)
 
 libstringf.a: $(OBJMODULES)
-		ar crs $@ $^
+	ar crs $@ $^
+libstringf32.a: $(OBJMODULES32)
+	ar crs $@ $^
+
+$(OBJMODULES): %.o: %.c string_functions.h
+	$(CC) $(FLAGS) $< -c
+$(OBJMODULES32): %32.o: %.c string_functions.h
+	$(CC) $(FLAGS) -m32 -c $< -o $@
